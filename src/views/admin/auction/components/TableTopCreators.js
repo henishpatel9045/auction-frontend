@@ -58,9 +58,9 @@ function TopCreatorTable(props) {
           mb='10px'
           boxShadow='0px 40px 58px -20px rgba(112, 144, 176, 0.26)'>
           <Text color={textColor} fontSize='xl' fontWeight='600'>
-            Top Creators
+            Bids
           </Text>
-          <Button variant='action'>See all</Button>
+          {/* <Button variant='action'>See all</Button> */}
         </Flex>
         <Table {...getTableProps()} variant='simple' color='gray.500'>
           <Thead>
@@ -95,12 +95,12 @@ function TopCreatorTable(props) {
                     if (cell.column.Header === "Name") {
                       data = (
                         <Flex align='center'>
-                          <Avatar
+                          {/* <Avatar
                             src={cell.value[1]}
                             w='30px'
                             h='30px'
                             me='8px'
-                          />
+                          /> */}
                           <Text
                             color={textColor}
                             fontSize='sm'

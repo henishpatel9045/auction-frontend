@@ -19,6 +19,8 @@ import RTL from "views/admin/rtl";
 
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
+import AuctionDetail from "views/admin/auction/components/AuctionDetail";
+import YourListing from "views/admin/auction/components/YourListing";
 
 const routes = [
   {
@@ -43,13 +45,13 @@ const routes = [
     component: NFTMarketplace,
     secondary: true,
   },
-  {
-    name: "Data Tables",
-    layout: "/admin",
-    icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
-    path: "/data-tables",
-    component: DataTables,
-  },
+  // {
+  //   name: "Data Tables",
+  //   layout: "/admin",
+  //   icon: <Icon as={MdBarChart} width='20px' height='20px' color='inherit' />,
+  //   path: "/data-tables",
+  //   component: DataTables,
+  // },
   {
     name: "Profile",
     layout: "/admin",
@@ -69,7 +71,7 @@ const routes = [
     layout: "/admin",
     path: "/items",
     icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-    component: Profile,
+    component: YourListing,
   },
   {
     name: "Bid History",
@@ -98,13 +100,6 @@ const routes = [
     path: "/sign-in",
     icon: <Icon as={MdLock} width='20px' height='20px' color='inherit' />,
     component: SignInCentered,
-  },
-  {
-    name: "RTL Admin",
-    layout: "/rtl",
-    path: "/rtl-default",
-    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    component: RTL,
   },
 ];
 
