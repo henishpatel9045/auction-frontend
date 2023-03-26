@@ -8,6 +8,7 @@ import { SidebarContext } from "contexts/SidebarContext";
 import React, { useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import routes from "routes.js";
+import AddListing from "views/admin/auction/components/AddListing";
 import AuctionDetail from "views/admin/auction/components/AuctionDetail";
 import YourListing from "views/admin/auction/components/YourListing";
 
@@ -162,6 +163,10 @@ export default function Dashboard(props) {
                 <Route
                   path={`/admin/auction/:auctionId`}
                   component={AuctionDetail}
+                />
+                <Route
+                  path={`/admin/listing/addNew`}
+                  component={AddListing}
                 />
                 {getRoutes(routes)}
                 <Redirect from="/" to="/admin/default" />
