@@ -25,6 +25,7 @@ import { MdNotificationsNone, MdInfoOutline } from 'react-icons/md';
 import { FaEthereum } from 'react-icons/fa';
 import routes from 'routes.js';
 import { ThemeEditor } from './ThemeEditor';
+import { ColorModeToggle } from '@hypertheme-editor/chakra-ui';
 export default function HeaderLinks(props) {
 	const { secondary } = props;
 	// Chakra Color Mode
@@ -51,7 +52,7 @@ export default function HeaderLinks(props) {
 			p="10px"
 			borderRadius="30px"
 			boxShadow={shadow}>
-			<SearchBar mb={secondary ? { base: '10px', md: 'unset' } : 'unset'} me="10px" borderRadius="30px" />
+			{/* <SearchBar mb={secondary ? { base: '10px', md: 'unset' } : 'unset'} me="10px" borderRadius="30px" /> */}
 			<Flex
 				bg={ethBg}
 				display={secondary ? 'flex' : 'none'}
@@ -60,7 +61,7 @@ export default function HeaderLinks(props) {
 				p="6px"
 				align="center"
 				me="6px">
-				<Flex align="center" justify="center" bg={ethBox} h="29px" w="29px" borderRadius="30px" me="7px">
+				{/* <Flex align="center" justify="center" bg={ethBox} h="29px" w="29px" borderRadius="30px" me="7px">
 					<Icon color={ethColor} w="9px" h="14px" as={FaEthereum} />
 				</Flex>
 				<Text w="max-content" color={ethColor} fontSize="sm" fontWeight="700" me="6px">
@@ -69,10 +70,10 @@ export default function HeaderLinks(props) {
 						{' '}
 						ETH
 					</Text>
-				</Text>
+				</Text> */}
 			</Flex>
 			<SidebarResponsive routes={routes} />
-			<Menu>
+			{/* <Menu>
 				<MenuButton p="0px">
 					<Icon mt="6px" as={MdNotificationsNone} color={navbarIcon} w="18px" h="18px" me="10px" />
 				</MenuButton>
@@ -103,9 +104,9 @@ export default function HeaderLinks(props) {
 						</MenuItem>
 					</Flex>
 				</MenuList>
-			</Menu>
+			</Menu> */}
 
-			<Menu>
+			{/* <Menu>
 				<MenuButton p="0px">
 					<Icon mt="6px" as={MdInfoOutline} color={navbarIcon} w="18px" h="18px" me="10px" />
 				</MenuButton>
@@ -144,12 +145,12 @@ export default function HeaderLinks(props) {
 						</Link>
 					</Flex>
 				</MenuList>
-			</Menu>
+			</Menu> */}
 
-			<ThemeEditor navbarIcon={navbarIcon} />
-
+			{/* <ThemeEditor navbarIcon={navbarIcon} /> */}
+			<ColorModeToggle/>
 			<Menu>
-				<MenuButton p="0px">
+				<MenuButton ml="1rem" p="0px">
 					<Avatar
 						_hover={{ cursor: 'pointer' }}
 						color="white"
@@ -179,9 +180,9 @@ export default function HeaderLinks(props) {
 						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
 							<Text fontSize="sm">Profile Settings</Text>
 						</MenuItem>
-						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
+						{/* <MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} borderRadius="8px" px="14px">
 							<Text fontSize="sm">Newsletter Settings</Text>
-						</MenuItem>
+						</MenuItem> */}
 						<MenuItem
 							_hover={{ bg: 'none' }}
 							_focus={{ bg: 'none' }}

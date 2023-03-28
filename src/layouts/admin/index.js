@@ -169,7 +169,7 @@ export default function Dashboard(props) {
                   component={AddListing}
                 />
                 {getRoutes(routes)}
-                <Redirect from="/" to="/admin/default" />
+                <Redirect from="/" to="/admin/profile" />
               </Switch>
             </Box>
           ) : null}

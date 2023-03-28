@@ -86,7 +86,7 @@ export default function YourListing() {
               align={{ base: "start", md: "center" }}
             >
               <Text color={textColor} fontSize="2xl" ms="24px" fontWeight="700">
-                Trending NFTs
+                Your Listings
               </Text>
               <Flex
                 align="center"

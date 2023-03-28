@@ -2,9 +2,7 @@ import React from "react";
 
 import { Icon } from "@chakra-ui/react";
 import {
-  MdBarChart,
   MdPerson,
-  MdHome,
   MdLock,
   MdOutlineShoppingCart,
 } from "react-icons/md";
@@ -15,7 +13,6 @@ import NFTMarketplace from "views/admin/marketplace";
 import Profile from "views/admin/profile";
 import Auction from "views/admin/auction";
 import DataTables from "views/admin/dataTables";
-import RTL from "views/admin/rtl";
 
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
@@ -23,13 +20,13 @@ import AuctionDetail from "views/admin/auction/components/AuctionDetail";
 import YourListing from "views/admin/auction/components/YourListing";
 
 const routes = [
-  {
-    name: "Main Dashboard",
-    layout: "/admin",
-    path: "/default",
-    icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
-    component: MainDashboard,
-  },
+  // {
+  //   name: "Main Dashboard",
+  //   layout: "/admin",
+  //   path: "/default",
+  //   icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
+  //   component: MainDashboard,
+  // },
   {
     name: "NFT Marketplace",
     layout: "/admin",
@@ -63,7 +60,12 @@ const routes = [
     name: "Auction",
     layout: "/admin",
     path: "/auction",
-    icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
+    icon: <Icon
+        as={MdOutlineShoppingCart}
+        width='20px'
+        height='20px'
+        color='inherit'
+      />,
     component: Auction,
   },
   {
@@ -77,20 +79,6 @@ const routes = [
     name: "Bid History",
     layout: "/admin",
     path: "/tender",
-    icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-    component: Profile,
-  },
-  {
-    name: "Tender",
-    layout: "/admin",
-    path: "/your-tender",
-    icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
-    component: Profile,
-  },
-  {
-    name: "Your Tender",
-    layout: "/admin",
-    path: "/bid-history",
     icon: <Icon as={MdPerson} width='20px' height='20px' color='inherit' />,
     component: Profile,
   },

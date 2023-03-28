@@ -1,6 +1,6 @@
 /* eslint-disable */
  
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { NavLink } from "react-router-dom";
 // Chakra imports
 import {
@@ -15,6 +15,16 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  List,
+  ListIcon,
+  ListItem,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -26,6 +36,44 @@ import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
+import { NotAllowedIcon } from "@chakra-ui/icons";
+import api from "api/api";
+
+const LoadingModal = ({ isLoading = false, errors, setShow }) => {
+	return (<Modal
+		isOpen={true}
+		isCentered
+		trapFocus={true}
+		onClose={() => setShow(false)}
+	>
+		<ModalOverlay />
+		<ModalContent>
+			<ModalHeader>Uploading</ModalHeader>
+			{/* <ModalCloseButton /> */}
+			<ModalBody>
+				{errors?.length!=0 && <ModalCloseButton />}
+				{errors?.length==0
+					? <>
+						<Spinner />
+						<Text>Signing In...</Text>
+					</>
+					: <List spacing={3}>
+						{errors?.map((item, index) => {
+							return (<>
+								<ListItem key={index} color="red.300" display="flex" alignItems="center" >
+									<ListIcon color="red.300" as={NotAllowedIcon} />
+									{item}
+								</ListItem>
+							</>
+							)
+						}
+						)}
+					</List>}
+			</ModalBody>
+		</ModalContent>
+	</Modal>
+	)
+}
 
 function SignIn() {
   // Chakra color mode
@@ -34,20 +82,61 @@ function SignIn() {
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-  const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
-  const googleText = useColorModeValue("navy.700", "white");
-  const googleHover = useColorModeValue(
-    { bg: "gray.200" },
-    { bg: "whiteAlpha.300" }
-  );
-  const googleActive = useColorModeValue(
-    { bg: "secondaryGray.300" },
-    { bg: "whiteAlpha.200" }
-  );
   const [show, setShow] = React.useState(false);
+
+  const [userName, setUserName] = useState("")
+  const [password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(true)
+  const [error, setError] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
+
+  useEffect(() => {
+    setIsDisabled(userName == "" || password == "")
+  }, [userName, password])
+
+  const handleUserName = (e) => {
+    setUserName(e.target.value)
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const handleRememberMe = (e) => {
+    setRememberMe(e.target.checked)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const data = {
+      username: userName,
+      password: password,
+    }
+    setIsLoading(true)
+    
+    api.post("api/auth/token/", data)
+         .then(res => {
+            console.log(res)
+            if (res.ok){
+              const token = res.data.access
+              localStorage.setItem("token", token)
+              window.location.href = "/"
+            }else{
+              console.log(res.data)
+              setError([res.data?.detail])
+              setShowModal(true)
+            }
+         })
+      setIsLoading(false)
+  }
+
   const handleClick = () => setShow(!show);
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
+      {showModal && <LoadingModal isLoading={isLoading} errors={error} setShow={setShowModal} />}
       <Flex
         maxW={{ base: "100%", md: "max-content" }}
         w='100%'
@@ -83,29 +172,7 @@ function SignIn() {
           mx={{ base: "auto", lg: "unset" }}
           me='auto'
           mb={{ base: "20px", md: "auto" }}>
-          <Button
-            fontSize='sm'
-            me='0px'
-            mb='26px'
-            py='15px'
-            h='50px'
-            borderRadius='16px'
-            bg={googleBg}
-            color={googleText}
-            fontWeight='500'
-            _hover={googleHover}
-            _active={googleActive}
-            _focus={googleActive}>
-            <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
-            Sign in with Google
-          </Button>
-          <Flex align='center' mb='25px'>
-            <HSeparator />
-            <Text color='gray.400' mx='14px'>
-              or
-            </Text>
-            <HSeparator />
-          </Flex>
+         
           <FormControl>
             <FormLabel
               display='flex'
@@ -121,8 +188,9 @@ function SignIn() {
               variant='auth'
               fontSize='sm'
               ms={{ base: "0px", md: "0px" }}
-              type='email'
-              placeholder='mail@simmmple.com'
+              type='text'
+              onChange={handleUserName}
+              placeholder='johndoe001'
               mb='24px'
               fontWeight='500'
               size='lg'
@@ -139,6 +207,7 @@ function SignIn() {
               <Input
                 isRequired={true}
                 fontSize='sm'
+                onChange={handlePassword}
                 placeholder='Min. 8 characters'
                 mb='24px'
                 size='lg'
@@ -159,6 +228,8 @@ function SignIn() {
                 <Checkbox
                   id='remember-login'
                   colorScheme='brandScheme'
+                  defaultChecked
+                  onChange={handleRememberMe}
                   me='10px'
                 />
                 <FormLabel
@@ -170,21 +241,14 @@ function SignIn() {
                   Keep me logged in
                 </FormLabel>
               </FormControl>
-              <NavLink to='/auth/forgot-password'>
-                <Text
-                  color={textColorBrand}
-                  fontSize='sm'
-                  w='124px'
-                  fontWeight='500'>
-                  Forgot password?
-                </Text>
-              </NavLink>
             </Flex>
             <Button
               fontSize='sm'
               variant='brand'
               fontWeight='500'
+              disabled={isDisabled}
               w='100%'
+              onClick={handleSubmit}
               h='50'
               mb='24px'>
               Sign In

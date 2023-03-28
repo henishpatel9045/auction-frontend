@@ -92,15 +92,15 @@ function TopCreatorTable(props) {
                 <Tr {...row.getRowProps()} key={index}>
                   {row.cells.map((cell, index) => {
                     let data = "";
-                    if (cell.column.Header === "Name") {
+                    if (cell.column.Header === "Bidder") {
                       data = (
                         <Flex align='center'>
-                          {/* <Avatar
+                          <Avatar
                             src={cell.value[1]}
                             w='30px'
                             h='30px'
                             me='8px'
-                          /> */}
+                          />
                           <Text
                             color={textColor}
                             fontSize='sm'
@@ -109,26 +109,17 @@ function TopCreatorTable(props) {
                           </Text>
                         </Flex>
                       );
-                    } else if (cell.column.Header === "Artworks") {
+                    } else if (cell.column.Header === "BidAmount") {
                       data = (
                         <Text
                           color={textColorSecondary}
                           fontSize='sm'
                           fontWeight='500'>
-                          {cell.value}
+                          {cell.value} ₹
                         </Text>
                       );
-                    } else if (cell.column.Header === "Rating") {
-                      data = (
-                        <Box>
-                          <Progress
-                            variant='table'
-                            colorScheme='brandScheme'
-                            value={cell.value}
-                          />
-                        </Box>
-                      );
-                    }
+                    } 
+                    
                     return (
                       <Td
                         {...cell.getCellProps()}

@@ -10,9 +10,18 @@ import {
   Grid,
   Switch,
   Select,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  Spinner,
 } from "@chakra-ui/react";
 import { CloseIcon } from "@chakra-ui/icons";
 import "./components.css";
+import { useHistory } from "react-router-dom"
+
 
 function AddListing() {
   const CATEGORIES = [
@@ -36,16 +45,73 @@ function AddListing() {
   const [endTime, setEndTime] = useState(Date.now())
   const [isListed, setIsListed] = useState(false)
   const [images, setImages] = useState([])
-  console.log(images);
+  const [imagesUrl, setImagesUrl] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useHistory()
+
   const handleChange = (setFunc, val) => {
     setFunc(val);
   }
 
-  console.log(startDate);
-  console.log(startTime);
-  console.log();
+
+  const handleUpload = async (files) => {
+    let imageUrl = [];
+
+    for (let file in files) {
+      const formData = new FormData();
+      formData.append("file", files[0]);
+      formData.append("upload_preset", "lup1iqul");
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/ddic7ju1q/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+          headers: {}
+        }
+      );
+      const file = await res.json();
+      console.log(file);
+      imageUrl.push(file.secure_url);
+    }
+    setImagesUrl(imageUrl);
+    return true;
+  }
+
+  const handleSubmit = async (e) => {
+    setIsLoading(true);
+    e.preventDefault();
+    await handleUpload(images);
+    const data = {
+      title,
+      description,
+      category,
+      startPrice,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      isListed,
+      imagesUrl
+    }
+    // const res = await fetch("http://localhost:5000/api/auction/add", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // });
+    // const result = await res.json();
+    // console.log(result);
+    setIsLoading(false);
+    router.push("/admin/items")
+    console.log("DONE!")
+  }
+
+
+
   return (
     <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
+      {isLoading && <LoadingModal />}
       <Text fontSize="2xl" fontWeight="700">
         Add Item
       </Text>
@@ -203,6 +269,7 @@ function AddListing() {
         mt={4}
         colorScheme="brand"
         type="submit"
+        onClick={handleSubmit}
       >
         Submit
       </Button>
@@ -232,6 +299,26 @@ const SelectedImage = ({ image, index, setImage }) => {
         }}
       ><CloseIcon /></Button>
     </Grid>
+  )
+}
+
+
+const LoadingModal = () => {
+  return (
+    <Modal
+      isOpen={true}
+      isCentered
+      trapFocus={true}
+    >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Uploading</ModalHeader>
+        {/* <ModalCloseButton /> */}
+        <ModalBody>
+          <Spinner />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   )
 }
 

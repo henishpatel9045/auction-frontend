@@ -25,13 +25,31 @@ function AuctionDetail() {
   const [isBidAcceptable, setIsBidAcceptable] = useState(false);
   const [bidAmount, setBidAmount] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
+  const [isBiddingStart, setIsBiddingStart] = useState(false);
 
   useEffect(() => {
     setData({
       title: "Magic Carpet",
       desc: "Enter in this creative world. Discover now the latest NFTs or start creating your own!",
       currentbid: 5000,
+      startDate: "2023-03-27",
+      startTime: "10:00",
+      endDate: "2023-03-29",
+      endTime: "18:00",
     });
+
+    const currentDate = new Date().getTime();
+    const startDate = new Date(Date.parse(data.startDate+"T"+data.startTime)).getTime();
+    const endDate = new Date(Date.parse(data.endDate+"T"+data.endTime)).getTime();
+    
+    console.log(currentDate, startDate, endDate)
+    if (currentDate >= startDate && currentDate <= endDate) {
+      setIsBiddingStart(true);
+
+      console.log("DONE");
+    }else{
+      setIsBiddingStart(false);
+    }
   }, []);
 
   const handleBid = () => {
@@ -118,6 +136,7 @@ function AuctionDetail() {
                 <Input
                   placeholder="Enter amount"
                   borderRadius="16px"
+                  disabled={!isBiddingStart}
                   onChange={(e) => {
                     if (e.target.value > data?.currentbid) {
                       setIsBidAcceptable(true);
@@ -141,6 +160,7 @@ function AuctionDetail() {
               <Button
                 onClick={handleBid}
                 colorScheme="twitter"
+                disabled={!isBiddingStart}
                 mt="1rem"
                 color="white"
                 fontWeight="700"
