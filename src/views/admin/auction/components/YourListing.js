@@ -20,48 +20,33 @@ import Nft1 from "assets/img/nfts/Nft1.png";
 import Nft2 from "assets/img/nfts/Nft2.png";
 import Nft3 from "assets/img/nfts/Nft3.png";
 import { NavLink } from "react-router-dom";
+import api from "api/api";
 
 export default function YourListing() {
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
-  const textColorBrand = useColorModeValue("brand.500", "white");
 
   const [data, setData] = useState([]);
-  const [upcomingData, setUpcomingData] = useState([]);
 
   useEffect(() => {
-    setData([
-      {
-        id: 1,
-        name: "ETH AI Brain",
-        author: "Henish Patel",
-        image: Nft1,
-        currentbid: "1500 ₹",
-      },
-      {
-        id: 2,
-        name: "ETH AI Brain",
-        author: "Vansh Patel",
-        image: Nft2,
-        currentbid: "3500 ₹",
-      },
-      {
-        id: 45,
-        name: "ETH AI Brain",
-        author: "Om Patel",
-        image: Nft3,
-        currentbid: "500 ₹",
-      },
-      {
-        id: 101,
-        name: "ETH AI Brain",
-        author: "Rohit Patel",
-        image: Nft1,
-        currentbid: "9500 ₹",
-      },
-    ]);
-    setUpcomingData(data);
-  });
+    let token = localStorage.getItem("access_token") || sessionStorage.getItem("access_token");
+    api.setHeaders({
+      Authorization: `JWT ${token}`
+    })
+    api.get("api/auction/listing?type=personal")
+         .then(res => {
+            if (res.ok){
+              console.log(res.data);
+              setData(res.data)
+            }else{
+              console.log(res.data)
+              alert("Something went wrong!")
+            }
+         }).catch(err => {
+            console.log(err)
+            alert("Something went wrong!")
+         })
+  }, []);
 
   return (
     <Box pt={{ base: "180px", md: "80px", xl: "80px" }}>
@@ -110,10 +95,10 @@ export default function YourListing() {
                 return (
                   <NFT
                     key={index}
-                    name={item.name}
-                    author={item.author}
-                    image={item.image}
-                    currentbid={item.currentbid}
+                    name={item.title}
+                    author={item.owner}
+                    image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
+                    currentbid={item.current_bid}
                     auctionId={item.id}
                     download="#"
                   />

@@ -188,7 +188,11 @@ export default function HeaderLinks(props) {
 							_focus={{ bg: 'none' }}
 							color="red.400"
 							borderRadius="8px"
-							px="14px">
+							px="14px"
+							onClick={() => {
+								localStorage.removeItem('access_token');
+								window.location.reload();
+							}}>
 							<Text fontSize="sm">Log out</Text>
 						</MenuItem>
 					</Flex>

@@ -122,7 +122,7 @@ function SignIn() {
             console.log(res)
             if (res.ok){
               const token = res.data.access
-              localStorage.setItem("token", token)
+              localStorage.setItem("access_token", token)
               window.location.href = "/"
             }else{
               console.log(res.data)

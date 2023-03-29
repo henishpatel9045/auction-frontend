@@ -21,6 +21,7 @@ import {
 import { CloseIcon } from "@chakra-ui/icons";
 import "./components.css";
 import { useHistory } from "react-router-dom"
+import api from "api/api";
 
 
 function AddListing() {
@@ -47,6 +48,7 @@ function AddListing() {
   const [images, setImages] = useState([])
   const [imagesUrl, setImagesUrl] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [otherCategory, setOtherCategory] = useState("")
   const router = useHistory()
 
   const handleChange = (setFunc, val) => {
@@ -82,29 +84,35 @@ function AddListing() {
     e.preventDefault();
     await handleUpload(images);
     const data = {
-      title,
-      description,
-      category,
-      startPrice,
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      isListed,
-      imagesUrl
+      title: title,
+      description: description,
+      category: category == "Other" && otherCategory ? otherCategory : category,
+      'starting_price': startPrice,
+      start_date: startDate,
+      start_time: startTime,
+      end_date: endDate,
+      end_time: endTime,
+      // active: isListed,
+      images: imagesUrl
     }
-    // const res = await fetch("http://localhost:5000/api/auction/add", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // });
-    // const result = await res.json();
-    // console.log(result);
-    setIsLoading(false);
-    router.push("/admin/items")
-    console.log("DONE!")
+
+    let token = sessionStorage.getItem("access_token") || localStorage.getItem("access_token")
+    api.post("/api/auction/listing/", data, {headers: {'Authorization': `JWT ${token}`}})
+    .then(res => {
+      if (res.ok){
+        setIsLoading(false);
+        alert("Item added successfully.")
+        router.push("/admin/items")
+      }
+      else{
+        setIsLoading(false);
+        alert(res.data)
+      }
+    })
+    .catch(err => {
+      setIsLoading(false);
+      alert("Something webt wrong! Try again")
+    })
   }
 
 
@@ -223,6 +231,7 @@ function AddListing() {
           <Input
             id="images"
             onChange={(e) => {
+              handleChange(setOtherCategory, e.target.value)
             }}
             placeholder="Specify category"
             borderRadius="16px"
@@ -230,13 +239,13 @@ function AddListing() {
           />
         </FormControl>}
       </Grid>
-      <FormControl>
+      {/* <FormControl>
         <FormLabel htmlFor="isListed">Is Listed</FormLabel>
         <Switch size="lg" placeholder="isListed"
           onChange={(e) => {
             handleChange(setIsListed, e.target.value)
           }} />
-      </FormControl>
+      </FormControl> */}
       <FormControl>
         <FormLabel htmlFor="images">Images</FormLabel>
         <Input

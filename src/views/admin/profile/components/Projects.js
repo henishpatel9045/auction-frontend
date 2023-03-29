@@ -9,7 +9,7 @@ import Card from "components/card/Card.js";
 import React from "react";
 import Project from "views/admin/profile/components/Project";
 
-export default function Projects(props) {
+export default function Projects({data}) {
   // Chakra Color Mode
   const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
   const textColorSecondary = "gray.400";
@@ -26,10 +26,6 @@ export default function Projects(props) {
         mt='10px'
         mb='4px'>
         All Bids
-      </Text>
-      <Text color={textColorSecondary} fontSize='md' me='26px' mb='40px'>
-        Here you can find more details about your projects. Keep you user
-        engaged by providing meaningful information.
       </Text>
       <Project
         boxShadow={cardShadow}

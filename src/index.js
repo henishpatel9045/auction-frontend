@@ -8,8 +8,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "theme/theme";
 import { ThemeEditorProvider } from "@hypertheme-editor/chakra-ui";
 
-// const userToken = localStorage.getItem("userToken")
-const userToken = true  ;
+// const userToken = true  ;
 
 ReactDOM.render(
   <ChakraProvider theme={theme}>
@@ -18,8 +17,8 @@ ReactDOM.render(
         <HashRouter>
           <Switch>
             <Route path={`/auth`} component={AuthLayout} />
-            {userToken && <Route path={`/admin`} component={AdminLayout} />}
-            {<Redirect from='/' to={userToken ? '/admin' : '/auth'} />}
+            {localStorage.getItem("access_token") && <Route path={`/admin`} component={AdminLayout} />}
+            {<Redirect from='/' to={localStorage.getItem("access_token") ? '/admin' : '/auth'} />}
           </Switch>
         </HashRouter>
       </ThemeEditorProvider>

@@ -1,4 +1,4 @@
- 
+
 import React, { useEffect, useState } from "react";
 
 // Chakra imports
@@ -20,6 +20,7 @@ import NFT from "components/card/NFT";
 import Nft1 from "assets/img/nfts/Nft1.png";
 import Nft2 from "assets/img/nfts/Nft2.png";
 import Nft3 from "assets/img/nfts/Nft3.png";
+import api from "api/api";
 
 export default function Marketplace() {
   // Chakra Color Mode
@@ -30,38 +31,37 @@ export default function Marketplace() {
   const [upcomingData, setUpcomingData] = useState([]);
 
   useEffect(() => {
-    setData([
-      {
-        id: 1,
-        name: "ETH AI Brain",
-        author: "Henish Patel",
-        image: Nft1,
-        currentbid: "1500 ₹"
-      },
-      {
-        id: 2,
-        name: "ETH AI Brain",
-        author: "Vansh Patel",
-        image: Nft2,
-        currentbid: "3500 ₹"
-      },
-      {
-        id: 45,
-        name: "ETH AI Brain",
-        author: "Om Patel",
-        image: Nft3,
-        currentbid: "500 ₹"
-      },
-      {
-        id: 101,
-        name: "ETH AI Brain",
-        author: "Rohit Patel",
-        image: Nft1,
-        currentbid: "9500 ₹"
-      },
-    ])
-    setUpcomingData(data);
-  })
+    let token = localStorage.getItem("access_token") || sessionStorage.getItem("access_token");
+    api.setHeaders({
+      Authorization: `JWT ${token}`
+    })
+    api.get("api/auction/listing?type=live")
+      .then(res => {
+        if (res.ok) {
+          console.log(res.data);
+          setData(res.data)
+        } else {
+          console.log(res.data)
+          alert("Something went wrong!")
+        }
+      }).catch(err => {
+        console.log(err)
+        alert("Something went wrong!")
+      })
+    api.get("api/auction/listing?type=upcoming")
+      .then(res => {
+        if (res.ok) {
+          console.log(res.data);
+          setUpcomingData(res.data)
+        } else {
+          console.log(res.data)
+          alert("Something went wrong!")
+        }
+      }).catch(err => {
+        console.log(err)
+        alert("Something went wrong!")
+      })
+  }, [])
 
 
   return (
@@ -84,7 +84,7 @@ export default function Marketplace() {
               direction={{ base: "column", md: "row" }}
               align={{ base: "start", md: "center" }}>
               <Text color={textColor} fontSize='2xl' ms='24px' fontWeight='700'>
-                 Ongoing Auction
+                Ongoing Auction
               </Text>
               <Flex
                 align='center'
@@ -119,19 +119,31 @@ export default function Marketplace() {
             </Flex>
             <SimpleGrid columns={{ base: 1, lg: 4, md: 3 }} gap='20px'>
               {
-                data?.map((item, index) => {
+                data?.length > 0 ? data?.map((item, index) => {
                   return (
                     <NFT
                       key={index}
-                      name={item.name}
-                      author={item.author}
-                      image={item.image}
+                      name={item.title}
+                      author={item.owner}
+                      image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
                       currentbid={item.currentbid}
                       auctionId={item.id}
                       download='#'
                     />
                   )
-                })
+                }) : <>
+                  <Box alignItems="center" justifyContent="center">
+                    <Text 
+                      color="blackAlpha.700"
+                      fontSize='2xl'
+                      ms='24px'
+                      fontWeight='700'
+                      textAlign="center"
+                    >
+                      No ongoing auction
+                    </Text>
+                  </Box>
+                </>
               }
             </SimpleGrid>
             <Text
@@ -148,19 +160,31 @@ export default function Marketplace() {
               gap='20px'
               mb={{ base: "20px", xl: "0px" }}>
               {
-                upcomingData?.map((item, index) => {
+                upcomingData?.length > 0 ? upcomingData?.map((item, index) => {
                   return (
                     <NFT
                       key={index}
-                      name={item.name}
-                      author={item.author}
-                      image={item.image}
+                      name={item.title}
+                      author={item.owner}
+                      image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
                       currentbid={item.currentbid}
                       auctionId={item.id}
                       download='#'
                     />
                   )
-                })
+                }) : <>
+                  <Box alignItems="center" justifyContent="center" width="100%">
+                    <Text 
+                      color="blackAlpha.700"
+                      fontSize='1.5rem'
+                      ms='24px'
+                      fontWeight='700'
+                      textAlign="center"
+                    >
+                      No upcoming auction
+                    </Text>
+                  </Box>
+                </>
               }
             </SimpleGrid>
           </Flex>

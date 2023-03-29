@@ -25,12 +25,13 @@ export default function NFT(props) {
   const textColorBid = useColorModeValue("brand.500", "white");
   return (
     <Card p='20px'>
-      <Flex direction={{ base: "column" }} justify='center'>
-        <Box mb={{ base: "20px", "2xl": "20px" }} position='relative'>
+      <Flex direction={{ base: "column" }} height="100%">
+        <Box mb={{ base: "20px", "2xl": "20px" }} height="100%" position='relative'>
           <Image
             src={image}
             w={{ base: "100%", "3xl": "100%" }}
             h={{ base: "100%", "3xl": "100%" }}
+            objectFit="cover"
             borderRadius='20px'
           />
           {/* <Button
