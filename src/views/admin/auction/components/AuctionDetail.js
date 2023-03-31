@@ -18,6 +18,7 @@ import { CheckIcon, NotAllowedIcon } from "@chakra-ui/icons";
 import tableDataTopCreators from "../variables/tableDataTopCreators.json";
 import TopCreatorTable from "./TableTopCreators";
 import api from "api/api";
+import TableTopCreators from "./TableTopCreators";
 
 function AuctionDetail() {
   const [data, setData] = useState([]);
@@ -44,7 +45,7 @@ function AuctionDetail() {
           const currentDate = new Date().getTime();
           const startDate = new Date(Date.parse(res.data.starting_time)).getTime();
           const endDate = new Date(Date.parse(res.data.ending_time)).getTime();
-
+          console.log(res.data);
           console.log(currentDate, startDate, endDate);
           if (currentDate >= startDate && currentDate <= endDate) {
             setIsBiddingStart(true);
@@ -93,7 +94,7 @@ function AuctionDetail() {
       }).then(res => {
         console.log(res);
       })
-      console.log("Bid Accepted");
+      window.location.reload()
     }
   };
 
@@ -230,10 +231,7 @@ function AuctionDetail() {
           </Box>
         </Box>
         <Box mt={{ base: "2.5rem", xl: "0px" }}>
-          <TopCreatorTable
-            columnsData={data?.bids}
-            // tableData={tableDataTopCreators}
-          />
+          <TableTopCreators data={data.bids} />
         </Box>
       </Grid>
     </Box>
