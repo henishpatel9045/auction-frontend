@@ -57,7 +57,7 @@ function AddListing() {
 
 
   const handleUpload = async (files) => {
-    let imageUrl = [];
+    let imgs = [];
 
     for (let file in files) {
       const formData = new FormData();
@@ -73,46 +73,52 @@ function AddListing() {
       );
       const file = await res.json();
       console.log(file);
-      imageUrl.push(file.secure_url);
+      imgs.push(file.secure_url);
     }
-    setImagesUrl(imageUrl);
+    setImagesUrl(imgs);
+    console.log(imagesUrl);
     return true;
   }
 
   const handleSubmit = async (e) => {
     setIsLoading(true);
     e.preventDefault();
-    await handleUpload(images);
-    const data = {
-      title: title,
-      description: description,
-      category: category == "Other" && otherCategory ? otherCategory : category,
-      'starting_price': startPrice,
-      start_date: startDate,
-      start_time: startTime,
-      end_date: endDate,
-      end_time: endTime,
-      // active: isListed,
-      images: imagesUrl
-    }
+    await handleUpload(images).then(res => {
 
-    let token = sessionStorage.getItem("access_token") || localStorage.getItem("access_token")
-    api.post("/api/auction/listing/", data, {headers: {'Authorization': `JWT ${token}`}})
-    .then(res => {
-      if (res.ok){
-        setIsLoading(false);
-        alert("Item added successfully.")
-        router.push("/admin/items")
+      const data = {
+        title: title,
+        description: description,
+        category: category == "Other" && otherCategory ? otherCategory : category,
+        'starting_price': startPrice,
+        start_date: startDate,
+        start_time: startTime,
+        end_date: endDate,
+        end_time: endTime,
+        // active: isListed,
+        images: imagesUrl
       }
-      else{
-        setIsLoading(false);
-        alert(res.data)
-      }
-    })
-    .catch(err => {
-      setIsLoading(false);
-      alert("Something webt wrong! Try again")
-    })
+
+      console.log(imagesUrl);
+      console.log(data);
+
+      let token = sessionStorage.getItem("access_token") || localStorage.getItem("access_token")
+      api.post("/api/auction/listing/", data, { headers: { 'Authorization': `JWT ${token}` } })
+        .then(res => {
+          if (res.ok) {
+            setIsLoading(false);
+            alert("Item added successfully.")
+            router.push("/admin/items")
+          }
+          else {
+            setIsLoading(false);
+            alert(res.data)
+          }
+        })
+        .catch(err => {
+          setIsLoading(false);
+          alert("Something webt wrong! Try again")
+        })
+    });
   }
 
 

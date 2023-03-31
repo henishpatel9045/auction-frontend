@@ -44,7 +44,7 @@ export default function Overview() {
         totalItems={data?.total_items}
       />
 
-      <Projects
+      {/* <Projects
         gridArea='1 / 2 / 2 / 2'
         banner={banner}
         avatar={avatar}
@@ -53,7 +53,7 @@ export default function Overview() {
         posts='17'
         followers='9.7k'
         following='274'
-      />
+      /> */}
     </Box>
   );
 }

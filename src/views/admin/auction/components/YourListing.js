@@ -96,7 +96,7 @@ export default function YourListing() {
                   <NFT
                     key={index}
                     name={item.title}
-                    author={item.owner}
+                    author={item.owner_name}
                     image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
                     currentbid={item.current_bid}
                     auctionId={item.id}
