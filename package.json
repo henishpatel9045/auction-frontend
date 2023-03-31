@@ -1,7 +1,11 @@
 {
-  "homepage": "https://horizon-ui.com/horizon-ui-chakra",
-  "name": "horizon-ui-chakra",
+  "name": "frontend",
   "version": "1.0.1",
+  "author": {
+    "name": "Henish Patel",
+    "email": "henishpatel9045@gmail.com",
+    "url": "https://github.com/henishpatel9045"
+  },
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",

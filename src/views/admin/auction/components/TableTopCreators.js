@@ -22,7 +22,7 @@ import {
 } from "react-table";
 
 function TopCreatorTable(props) {
-  const { columnsData, tableData } = props;
+  const { columnsData=[], tableData=[] } = props;
 
   const columns = useMemo(() => columnsData, [columnsData]);
   const data = useMemo(() => tableData, [tableData]);

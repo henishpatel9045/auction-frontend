@@ -14,11 +14,14 @@ export default function Overview() {
   const [data, setData] = useState({})
 
   useEffect(() => {
-    let token = localStorage.getItem("access_token") || sessionStorage.getItem("access_token")
+    let token =
+      localStorage.getItem("access_token") ||
+      sessionStorage.getItem("access_token");
+    api.setHeaders({
+      Authorization: `JWT ${token}`,
+    });
     api
-      .get("/auth/profile", 
-              {headers: 
-                  {'Authorization': `JWT ${token}`}})
+      .get("api/auth/user")
       .then(res => {
         if (res.ok){
           setData(res.data)

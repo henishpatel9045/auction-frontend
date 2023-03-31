@@ -12,12 +12,12 @@ import {
   Alert,
   Button,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { CheckIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
 import tableDataTopCreators from "../variables/tableDataTopCreators.json";
-import { tableColumnsTopCreators } from "../variables/tableColumnsTopCreators";
 import TopCreatorTable from "./TableTopCreators";
+import api from "api/api";
 
 function AuctionDetail() {
   const [data, setData] = useState([]);
@@ -27,29 +27,51 @@ function AuctionDetail() {
   const [showAlert, setShowAlert] = useState(false);
   const [isBiddingStart, setIsBiddingStart] = useState(false);
 
-  useEffect(() => {
-    setData({
-      title: "Magic Carpet",
-      desc: "Enter in this creative world. Discover now the latest NFTs or start creating your own!",
-      currentbid: 5000,
-      startDate: "2023-03-27",
-      startTime: "10:00",
-      endDate: "2023-03-29",
-      endTime: "18:00",
+  const router = useHistory();
+
+  useEffect(async () => {
+    let token =
+      localStorage.getItem("access_token") ||
+      sessionStorage.getItem("access_token");
+    api.setHeaders({
+      Authorization: `JWT ${token}`,
     });
+    await api
+      .get(`api/auction/item/${auctionId}`)
+      .then((res) => {
+        if (res.ok) {
+          setData(res.data);
+          const currentDate = new Date().getTime();
+          const startDate = new Date(Date.parse(res.data.starting_time)).getTime();
+          const endDate = new Date(Date.parse(res.data.ending_time)).getTime();
 
-    const currentDate = new Date().getTime();
-    const startDate = new Date(Date.parse(data.startDate+"T"+data.startTime)).getTime();
-    const endDate = new Date(Date.parse(data.endDate+"T"+data.endTime)).getTime();
-    
-    console.log(currentDate, startDate, endDate)
-    if (currentDate >= startDate && currentDate <= endDate) {
-      setIsBiddingStart(true);
+          console.log(currentDate, startDate, endDate);
+          if (currentDate >= startDate && currentDate <= endDate) {
+            setIsBiddingStart(true);
 
-      console.log("DONE");
-    }else{
-      setIsBiddingStart(false);
-    }
+            console.log("DONE");
+          } else {
+            setIsBiddingStart(false);
+          }
+        } else if (res.status == 404) {
+          alert("Auction not found");
+          router.push("/admin/auction");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
+
+    // setData({
+    //   title: "Magic Carpet",
+    //   desc: "Enter in this creative world. Discover now the latest NFTs or start creating your own!",
+    //   currentbid: 5000,
+    //   startDate: "2023-03-27",
+    //   startTime: "10:00",
+    //   endDate: "2023-03-29",
+    //   endTime: "18:00",
+    // });
   }, []);
 
   const handleBid = () => {
@@ -59,6 +81,18 @@ function AuctionDetail() {
       }, 2000);
       setShowAlert(true);
     } else {
+      let token =
+      localStorage.getItem("access_token") ||
+      sessionStorage.getItem("access_token");
+    api.setHeaders({
+      Authorization: `JWT ${token}`,
+    });
+      api.post("api/auction/bid", {
+        item: auctionId,
+        price: bidAmount
+      }).then(res => {
+        console.log(res);
+      })
       console.log("Bid Accepted");
     }
   };
@@ -79,7 +113,7 @@ function AuctionDetail() {
             
         </Flex> */}
         <Box>
-          <Banner />
+          <Banner images={data?.images} />
           <Box pl={"5"}>
             <Text
               fontSize={{ base: "24px", md: "34px" }}
@@ -113,7 +147,7 @@ function AuctionDetail() {
               mb="40px"
               lineHeight="28px"
             >
-              {data?.desc}
+              {data?.description}
             </Text>
             <Box>
               <Text
@@ -123,7 +157,7 @@ function AuctionDetail() {
                 mb="2rem"
                 lineHeight="2rem"
               >
-                CurrentBid: {data?.currentbid} ₹
+                CurrentBid: {data?.current_bid} ₹
               </Text>
               <InputGroup>
                 <InputLeftElement
@@ -138,7 +172,7 @@ function AuctionDetail() {
                   borderRadius="16px"
                   disabled={!isBiddingStart}
                   onChange={(e) => {
-                    if (e.target.value > data?.currentbid) {
+                    if (e.target.value > data?.current_bid) {
                       setIsBidAcceptable(true);
                       setBidAmount(e.target.value);
                     } else {
@@ -195,13 +229,11 @@ function AuctionDetail() {
             </Box>
           </Box>
         </Box>
-        <Box mt={
-          {base: "2.5rem", xl: "0px"}
-        }>
+        <Box mt={{ base: "2.5rem", xl: "0px" }}>
           <TopCreatorTable
-            columnsData={tableColumnsTopCreators}
-            tableData={tableDataTopCreators}
-           />
+            columnsData={data?.bids}
+            // tableData={tableDataTopCreators}
+          />
         </Box>
       </Grid>
     </Box>
