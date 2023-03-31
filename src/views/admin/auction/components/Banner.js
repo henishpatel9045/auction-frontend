@@ -11,7 +11,7 @@ import IMG3 from "assets/img/nfts/Nft3.png";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 
-export default function Banner({images=[IMG1]}) {
+export default function Banner({ images = [IMG1] }) {
   // Chakra Color Mode
   return (
     <Flex
@@ -29,14 +29,24 @@ export default function Banner({images=[IMG1]}) {
         showThumbs={false}
         width="100%"
       >
-      {images.map((item, index) => {
-        return <Image
-          width="100%"
-          objectFit="cover"
-          borderRadius="30px" 
-          src={item}
-        />
-      })}
+        {images.map((item, index) => {
+          return (
+            <Image
+              width="100%"
+              objectFit="cover"
+              borderRadius="30px"
+              src={item}
+            />
+          );
+        })}
+        {images?.length == 0 && (
+          <Image
+            width="100%"
+            objectFit="cover"
+            borderRadius="30px"
+            src={IMG1}
+          />
+        )}
       </Carousel>
 
       {/* <Flex align='center'>

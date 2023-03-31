@@ -49,7 +49,7 @@ export default function HeaderLinks(props) {
 			  console.log(res.data)
 			}
 		  })
-	  })
+	  }, [])
 
 	return (
 		<Flex

@@ -22,6 +22,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import "./components.css";
 import { useHistory } from "react-router-dom"
 import api from "api/api";
+const ApiSauce = require("apisauce")
 
 
 function AddListing() {
@@ -58,24 +59,24 @@ function AddListing() {
 
   const handleUpload = async (files) => {
     let imgs = [];
+    const uploader = ApiSauce.create({
+      baseURL: `https://api.cloudinary.com/v1_1/ddic7ju1q/image/upload`,
+    })
 
     for (let file in files) {
       const formData = new FormData();
       formData.append("file", files[0]);
       formData.append("upload_preset", "lup1iqul");
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/ddic7ju1q/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-          headers: {}
+      uploader.post(formData).
+      then(res => {
+        if (res.ok){
+          imgs.push(res.data.secure_url);
         }
-      );
-      const file = await res.json();
-      console.log(file);
-      imgs.push(file.secure_url);
+        console.log(file);
+        setImagesUrl(imgs);
+      });
     }
-    setImagesUrl(imgs);
+    console.log(imgs)
     console.log(imagesUrl);
     return true;
   }

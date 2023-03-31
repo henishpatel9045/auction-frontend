@@ -4,10 +4,8 @@ import React, { useEffect, useState } from "react";
 // Chakra imports
 import {
   Box,
-  Button,
   Flex,
   Grid,
-  Link,
   Text,
   useColorModeValue,
   SimpleGrid,
@@ -25,7 +23,6 @@ import api from "api/api";
 export default function Marketplace() {
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
-  const textColorBrand = useColorModeValue("brand.500", "white");
 
   const [data, setData] = useState([]);
   const [upcomingData, setUpcomingData] = useState([]);

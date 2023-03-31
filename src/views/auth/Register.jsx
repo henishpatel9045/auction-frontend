@@ -90,6 +90,7 @@ function Register() {
 	const [confirmPassword, setConfirmPassword] = useState("")
 	const [email, setEmail] = useState("")
 	const router = useHistory()
+	const [isShowConfirm, setIsShowConfirm] = useState(false)
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [showModal, setShowModal] = useState(false)
@@ -187,6 +188,7 @@ function Register() {
 
 
 	const handleClick = () => setShow(!show);
+	const handleClickConfirm = () => setIsShowConfirm(!isShowConfirm);
 	return (
 		<DefaultAuth illustrationBackground={illustration} image={illustration}>
 			{showModal && <LoadingModal isLoading={false} errors={error} setShow={setShowModal} />}
@@ -200,7 +202,7 @@ function Register() {
 				justifyContent='center'
 				mb={{ base: "30px", md: "60px" }}
 				px={{ base: "25px", md: "0px" }}
-				mt={{ base: "40px", md: "14vh" }}
+				mt={{ base: "40px", md: "6vh" }}
 				flexDirection='column'>
 				<Box me='auto'>
 					<Heading color={textColor} fontSize='36px' mb='10px'>
@@ -384,15 +386,15 @@ function Register() {
 								placeholder='Min. 8 characters'
 								mb='24px'
 								size='lg'
-								type={show ? "text" : "password"}
+								type={isShowConfirm ? "text" : "password"}
 								variant='auth'
 							/>
 							<InputRightElement display='flex' alignItems='center' mt='4px'>
 								<Icon
 									color={textColorSecondary}
 									_hover={{ cursor: "pointer" }}
-									as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-									onClick={handleClick}
+									as={isShowConfirm ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+									onClick={handleClickConfirm}
 								/>
 							</InputRightElement>
 						</InputGroup>

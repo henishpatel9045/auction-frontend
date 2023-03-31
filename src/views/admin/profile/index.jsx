@@ -29,7 +29,7 @@ export default function Overview() {
           console.log(res.data)
         }
       })
-  })
+  }, [])
 
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>

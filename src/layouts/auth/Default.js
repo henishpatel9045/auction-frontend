@@ -3,6 +3,8 @@ import { Box, Flex, Icon, Text } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import React from "react";
 import FixedPlugin from "components/fixedPlugin/FixedPlugin";
+
+import BG from "../../assets/img/auth/bg.svg"
 // Custom components
 
 function AuthIllustration(props) {
@@ -34,15 +36,24 @@ function AuthIllustration(props) {
           position='absolute'
           right='0px'>
           <Flex
-            bg={`url(${illustrationBackground})`}
+            // bg={`url(${illustrationBackground})`}
+            bg={`url(${BG})`}
             justify='center'
-            align='end'
+            align='center'
+            // fontWeight="500"
+            textShadow="0rem 0rem 1rem #3311db"
+            color="white"
             w='100%'
             h='100%'
             bgSize='cover'
             bgPosition='50%'
             position='absolute'
-            borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}></Flex>
+            borderBottomLeftRadius={{ lg: "120px", xl: "200px" }}>
+              <Text
+              fontSize="4rem">
+                <b>Auction</b>Work
+              </Text>
+            </Flex>
         </Box>
       </Flex>
       <FixedPlugin />
