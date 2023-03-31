@@ -116,6 +116,7 @@ export default function HeaderLinks(props) {
 							px="14px"
 							onClick={() => {
 								localStorage.removeItem('access_token');
+								sessionStorage.removeItem('access_token');
 								window.location.reload();
 							}}>
 							<Text fontSize="sm">Log out</Text>

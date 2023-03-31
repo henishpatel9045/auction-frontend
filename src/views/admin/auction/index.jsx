@@ -114,35 +114,36 @@ export default function Marketplace() {
                 </Link> */}
               </Flex>
             </Flex>
-            <SimpleGrid columns={{ base: 1, lg: 4, md: 3 }} gap='20px'>
+            {data?.length > 0 ? <SimpleGrid
+              columns={{ base: 1, lg: 4, md: 3 }}
+              gap='20px'
+              mb={{ base: "20px", xl: "0px" }}>
               {
-                data?.length > 0 ? data?.map((item, index) => {
+                data?.map((item, index) => {
                   return (
                     <NFT
                       key={index}
                       name={item.title}
-                      author={item.owner}
+                      author={item.owner_name}
                       image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
                       currentbid={item.currentbid}
                       auctionId={item.id}
                       download='#'
                     />
                   )
-                }) : <>
-                  <Box alignItems="center" justifyContent="center">
-                    <Text 
-                      color="blackAlpha.700"
-                      fontSize='2xl'
-                      ms='24px'
-                      fontWeight='700'
-                      textAlign="center"
-                    >
-                      No ongoing auction
-                    </Text>
-                  </Box>
-                </>
-              }
-            </SimpleGrid>
+                })}
+            </SimpleGrid> : <Box alignItems="center" justifyContent="center" width="100%">
+              <Text
+                color="blackAlpha.700"
+                fontSize='1.5rem'
+                ms='24px'
+                fontWeight='700'
+                textAlign="center"
+              >
+                No Ongoing auction
+              </Text>
+            </Box>
+            }
             <Text
               mt='45px'
               mb='36px'
@@ -152,38 +153,35 @@ export default function Marketplace() {
               fontWeight='700'>
               Upcoming Auction
             </Text>
-            <SimpleGrid
+            {upcomingData?.length > 0 ? <SimpleGrid
               columns={{ base: 1, lg: 4, md: 3 }}
               gap='20px'
               mb={{ base: "20px", xl: "0px" }}>
               {
-                upcomingData?.length > 0 ? upcomingData?.map((item, index) => {
+                upcomingData?.map((item, index) => {
                   return (
                     <NFT
                       key={index}
                       name={item.title}
-                      author={item.owner}
+                      author={item.owner_name}
                       image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
                       currentbid={item.currentbid}
                       auctionId={item.id}
                       download='#'
                     />
                   )
-                }) : <>
-                  <Box alignItems="center" justifyContent="center" width="100%">
-                    <Text 
-                      color="blackAlpha.700"
-                      fontSize='1.5rem'
-                      ms='24px'
-                      fontWeight='700'
-                      textAlign="center"
-                    >
-                      No upcoming auction
-                    </Text>
-                  </Box>
-                </>
-              }
-            </SimpleGrid>
+                })}
+            </SimpleGrid> : <Box alignItems="center" justifyContent="center" width="100%">
+              <Text
+                color="blackAlpha.700"
+                fontSize='1.5rem'
+                ms='24px'
+                fontWeight='700'
+                textAlign="center"
+              >
+                No upcoming auction
+              </Text>
+            </Box>}
           </Flex>
         </Flex>
         {/* <Flex

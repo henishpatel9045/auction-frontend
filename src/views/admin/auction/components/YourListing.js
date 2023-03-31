@@ -90,21 +90,37 @@ export default function YourListing() {
                 </Button>
               </Flex>
             </Flex>
-            <SimpleGrid columns={{ base: 1, lg: 4, md: 3 }} gap="20px">
-              {data?.map((item, index) => {
-                return (
-                  <NFT
-                    key={index}
-                    name={item.title}
-                    author={item.owner_name}
-                    image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
-                    currentbid={item.current_bid}
-                    auctionId={item.id}
-                    download="#"
-                  />
-                );
-              })}
-            </SimpleGrid>
+
+            {data?.length > 0 ? <SimpleGrid
+              columns={{ base: 1, lg: 4, md: 3 }}
+              gap='20px'
+              mb={{ base: "20px", xl: "0px" }}>
+              {
+                data?.map((item, index) => {
+                  return (
+                    <NFT
+                      key={index}
+                      name={item.title}
+                      author={item.owner_name}
+                      image={item.images[0] || [Nft1, Nft2, Nft3][item.id % 3]}
+                      currentbid={item.currentbid}
+                      auctionId={item.id}
+                      download='#'
+                    />
+                  )
+                })}
+            </SimpleGrid> : <Box alignItems="center" justifyContent="center" width="100%">
+              <Text
+                color="blackAlpha.700"
+                fontSize='1.5rem'
+                ms='24px'
+                fontWeight='700'
+                textAlign="center"
+              >
+                You don't have any item for auction.
+              </Text>
+            </Box>
+            }
           </Flex>
         </Flex>
       </Grid>
