@@ -68,16 +68,13 @@ function AddListing() {
       formData.append("file", files[0]);
       formData.append("upload_preset", "lup1iqul");
       uploader.post(formData).
-      then(res => {
-        if (res.ok){
-          imgs.push(res.data.secure_url);
-        }
-        console.log(file);
-        setImagesUrl(imgs);
-      });
+        then(res => {
+          if (res.ok) {
+            imgs.push(res.data.secure_url);
+          }
+          setImagesUrl(imgs);
+        });
     }
-    console.log(imgs)
-    console.log(imagesUrl);
     return true;
   }
 
@@ -98,9 +95,6 @@ function AddListing() {
         // active: isListed,
         images: imagesUrl
       }
-
-      console.log(imagesUrl);
-      console.log(data);
 
       let token = sessionStorage.getItem("access_token") || localStorage.getItem("access_token")
       api.post("/api/auction/listing/", data, { headers: { 'Authorization': `JWT ${token}` } })
@@ -174,8 +168,14 @@ function AddListing() {
           <FormLabel htmlFor="startDate">Starting Date</FormLabel>
           <Input
             onChange={(e) => {
-              handleChange(setStartDate, e.target.value)
+              if (Date.parse(e.target.value) < Date.now()) {
+                alert("Can't set past date as starting date.")
+                e.target.value = startDate
+              } else {
+                handleChange(setStartDate, e.target.value)
+              }
             }}
+            value={startDate}
             id="startDate"
             placeholder="startDate"
             borderRadius="16px"
@@ -198,7 +198,12 @@ function AddListing() {
           <FormLabel htmlFor="endDate">End Date</FormLabel>
           <Input
             onChange={(e) => {
-              handleChange(setEndDate, e.target.value)
+              if (Date.parse(e.target.value) < (Date.parse(startDate) || Date.now())) {
+                alert("Can't set past date as endDate date.")
+              }
+              else {
+                handleChange(setEndDate, e.target.value)
+              }
             }}
             id="endDate"
             placeholder="endDate"
