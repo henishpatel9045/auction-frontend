@@ -6,6 +6,7 @@
     "email": "henishpatel9045@gmail.com",
     "url": "https://github.com/henishpatel9045"
   },
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.1.5",
